@@ -12,6 +12,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Python: admin start",
+            "type": "python",
+            "request": "launch",
+            "program": "admin.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Sql File start",
             "type": "python",
             "request": "launch",

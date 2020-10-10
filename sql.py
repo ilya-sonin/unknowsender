@@ -20,3 +20,12 @@ def add_user(chat_id):
     if chat_id not in chat_ids:
         cur.execute(f"INSERT INTO users(chat_id) VALUES('{chat_id}');")
         db_connect.commit()
+
+
+def get_users_chat_ids():
+    db_connect = sql.connect("db.sqlite3")
+    cur = db_connect.cursor()
+    cur.execute("SELECT * FROM users;")
+    users_data = cur.fetchall() 
+    chat_ids = [i[1] for i in users_data]
+    return chat_ids
