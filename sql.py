@@ -11,21 +11,23 @@ def get_token():
 
 
 # Checking the username for uniqueness and writing
-def add_user(chat_id):
+def add_user(username, chat_id):
     db_connect = sql.connect("db.sqlite3")
     cur = db_connect.cursor()
     cur.execute("SELECT * FROM users;")
-    users_data = cur.fetchall() 
-    chat_ids = [i[1] for i in users_data]
-    if chat_id not in chat_ids:
-        cur.execute(f"INSERT INTO users(chat_id) VALUES('{chat_id}');")
+    users_data = cur.fetchall()
+    usernames = [i[1] for i in users_data]
+    chat_ids = [i[2] for i in users_data]
+    if (username not in usernames) and (chat_id not in chat_ids):
+        cur.execute("""INSERT INTO users(username, chat_id) VALUES("{}", {});""".format(username, chat_id))
         db_connect.commit()
 
 
+# Get chat_ids
 def get_users_chat_ids():
     db_connect = sql.connect("db.sqlite3")
     cur = db_connect.cursor()
     cur.execute("SELECT * FROM users;")
     users_data = cur.fetchall() 
-    chat_ids = [i[1] for i in users_data]
+    chat_ids = [i[2] for i in users_data]
     return chat_ids
