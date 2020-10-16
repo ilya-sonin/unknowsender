@@ -1,0 +1,17 @@
+[Unit]
+Description=Telegram bot 'UnknowsenderBot'
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/unknowsender
+VIRTUAL_ENV = /home/unknowsender/venv/
+Environment=PATH=$VIRTUAL_ENV/bin:$PATH
+ExecStart=/home/unknowsender/venv/bin/python3 app.py
+RestartSec=10
+Restart=always
+ 
+[Install]
+WantedBy=multi-user.target
