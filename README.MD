@@ -18,8 +18,9 @@ pip3 install -r requirements.txt
 cp home/unknowsender/unknowsender.service /etc/systemd/system
 ```
 Далее общие команды для запуска
-
+```
 systemctl daemon-reload
 systemctl enable unksend_bot
 systemctl start unksend_bot
 systemctl status unksend_bot
+```
