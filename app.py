@@ -5,10 +5,21 @@ from telebot import types
 from sql import get_token, add_user
 from SMS import FloodSMS
 
+messages = {
+    "start": """Привет! Я бот который спамит СМС-ки!\nПросто отправляй мне номер телефона в любом формате, но с кодом страны""",
+    "spam_start": """Спам начался и будеь длится {duration} с.\nЧтобы все остановить напиши /stop
+    """,
+    "spam_two_numbers": """Сразу два номер нельзя. Я останавливаю спам!
+    """,
+    "spam_stop": """
+    Я останавливаюсь. Если хочешь присылай еще номер
+    """,
+}
+
 # Basic spam settings
 SETTINGS = {
     "duration": 300,
-    'threads_count': 6
+    'threads_count': 12
 }
 
 # Bot initialization
@@ -18,41 +29,35 @@ bot = telebot.AsyncTeleBot(get_token())
 @bot.message_handler(commands=["start"])
 def start(message):
     add_user(message.chat.username, message.chat.id)
-    bot.send_message(message.chat.id, "Привет! Я бот который спамит SMS!😏\nОтправляй мне номер телефона и я все сделаю!👊\nНомер должен быть в таких форматах: +74992165050, 74992165050, 84992165050\n\nЕсли есть какие то вопросы или сомнения то напиши /faq")
+    bot.send_message(message.chat.id, messages["start"])
 
 # Initialization SMSSpam class
 floodsms = FloodSMS(duration=SETTINGS["duration"], threads_count=SETTINGS['threads_count'])
 
-# Get phone number
-@bot.message_handler(regexp=r"\b\+?[7,8](\s*\d{3}\s*\d{3}\s*\d{2}\s*\d{2})\b")
+# Phone number
+@bot.message_handler(regexp=r"(?:\+|\d)[\d\-\(\) ]{9,}\d")
 def phone(message):
     if floodsms.is_ranning == False:
-        bot.send_message(message.chat.id, "Спам начался и будет длиться {} с. Чтобы остановить это все дело напиши /stop".format(SETTINGS['duration']))
+        bot.send_message(message.chat.id, messages["spam_start"].format(duration=SETTINGS['duration']))
         floodsms.run(phone=message.text)
     else:
-        bot.send_message(message.chat.id, "Нее, сразу два номера нельзя!😡 Я останавливаю спам! Чтобы начать заного снова пришли мне номер")
+        bot.send_message(message.chat.id, messages["spam_two_numbers"])
         floodsms.stop()
-
 
 # Stop spam
 @bot.message_handler(commands=["stop"])
 def stop(message):
     if floodsms.is_ranning:
         floodsms.stop()
-        bot.send_message(message.chat.id, "Окей мы останавливаемся!\nЕсли хочешь еще присылай номер телефона😝")
+        bot.send_message(message.chat.id, messages["spam_stop"])
     else:
         bot.send_message(message.chat.id, "А мне нечего останавливать🤷‍♂️")
-
-
-@bot.message_handler(commands=["faq"])
-def faq(message):
-    bot.send_message(message.chat.id, "Ну тут пока ничего нету🤷‍♂️")
 
 
 # All message 
 @bot.message_handler(content_types=["text", "sticker", "photo", "audio"])
 def all_messages(message):
-    bot.send_message(message.chat.id, "Так, я не понял что ты мне отправил. Напиши мне просто номер телефона😋")
+    bot.send_message(message.chat.id, "Так, я не понял что ты мне отправил. Напиши мне просто номер телефона")
 
 
 if __name__ == "__main__":

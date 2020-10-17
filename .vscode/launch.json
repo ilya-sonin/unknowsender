@@ -10,27 +10,6 @@
             "request": "launch",
             "program": "app.py",
             "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: admin start",
-            "type": "python",
-            "request": "launch",
-            "program": "admin.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Sql File start",
-            "type": "python",
-            "request": "launch",
-            "program": "sql.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: SMS File start",
-            "type": "python",
-            "request": "launch",
-            "program": "tools/SMS/sms.py",
-            "console": "integratedTerminal"
         }
     ]
 }
