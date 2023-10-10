@@ -1,7 +1,7 @@
-requests
-scapy
-wget
-argparse
-colorama
-humanfriendly
-pyTelegramBotAPI
+requests==2.23.0
+scapy==2.4.3
+wget==3.2.0
+argparse==1.4.0
+colorama==0.4.3
+humanfriendly==8.2.0
+pyTelegramBotAPI==3.7.6
